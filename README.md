@@ -16,13 +16,12 @@ Welcome to the NLP App! A powerful tool for various natural language processing 
 
 To run the app, use the following command in your terminal:
 
-````bash
+```bash
 streamlit run nlp_app.py
+```
 
-### 2. Dependencies Section
 List the libraries your app requires. Here’s a suggested format:
 
-```markdown
 ## Dependencies 📦
 
 Make sure you have the following packages installed:
@@ -49,11 +48,15 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact 📧
 
-Feel free to reach out at [your-email@example.com].
+Feel free to reach out at [abhishekganapure22@gmail.com].
 
 ### Key Updates:
+
 - **Expanded Features**: Added lemmatization, word generation, stop words removal, n-grams, and POS tagging.
 - **Format**: Kept the overall structure and style, maintaining a friendly tone with emojis.
 
 Feel free to replace the placeholder for your email and repository URL. Let me know if you need any more modifications!
-````
+
+```
+
+```
