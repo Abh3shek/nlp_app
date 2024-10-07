@@ -56,7 +56,3 @@ Feel free to reach out at [abhishekganapure22@gmail.com].
 - **Format**: Kept the overall structure and style, maintaining a friendly tone with emojis.
 
 Feel free to replace the placeholder for your email and repository URL. Let me know if you need any more modifications!
-
-```
-
-```
