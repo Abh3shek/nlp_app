@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import streamlit as st
-import spacy as sp
+import spacy
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -14,7 +14,7 @@ import tensorflow as tf
 tf.compat.v1.reset_default_graph()
 
 # Load NLP models
-nlp = sp.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_sm")
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 nltk.download('punkt')
