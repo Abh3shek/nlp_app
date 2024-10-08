@@ -14,7 +14,14 @@ import tensorflow as tf
 tf.compat.v1.reset_default_graph()
 
 # Load NLP models
-nlp = spacy.load("en_core_web_sm")
+# nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except:
+    # If the model is not found, download it
+    import os
+    os.system("python -m spacy download en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 nltk.download('punkt')
