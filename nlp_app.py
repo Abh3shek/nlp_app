@@ -66,7 +66,7 @@ if task == "Word Generation":
     st.subheader("Text Generation using GPT-2")
     if text_input:
         generator = pipeline("text-generation", model="gpt2")
-        generated_text = generator(text_input, max_length=50, num_return_sequences=1)[0]['generated_text']
+        generated_text = generator(text_input, max_length=5, num_return_sequences=1)[0]['generated_text']
         st.write(generated_text)
 
 # 2. Stop Words Removal
