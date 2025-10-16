@@ -9,29 +9,45 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import pipeline
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
+
+# TensorFlow setting
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 tf.compat.v1.reset_default_graph()
 
+# Set NLTK data path for cloud environment
 nltk_data_path = './nltk_data'
 if not os.path.exists(nltk_data_path):
     os.makedirs(nltk_data_path)
 nltk.data.path.append(nltk_data_path)
 
+# Function to ensure NLTK resources are downloaded
+def download_nltk_data():
+    try:
+        nltk.data.find('corpora/stopwords.zip')
+    except LookupError:
+        nltk.download('stopwords', download_dir=nltk_data_path)
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt', download_dir=nltk_data_path)
+    try:
+        nltk.data.find('tokenizers/punkt_tab')
+    except LookupError:
+        nltk.download('punkt_tab', download_dir=nltk_data_path)
+
+# Download necessary NLTK resources
+download_nltk_data()
+
 # Load NLP models
-# nlp = spacy.load("en_core_web_sm")
 try:
     nlp = spacy.load("en_core_web_sm")
 except:
-    # If the model is not found, download it
-    import os
     os.system("python -m spacy download en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
+
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-nltk.download('punkt', download_dir=nltk_data_path)
-nltk.download('punkt_tab', download_dir=nltk_data_path)
-nltk.download('stopwords', download_dir=nltk_data_path)
 
 # Streamlit UI Setup
 st.title("NLP Pipeline with Streamlit")
@@ -70,77 +86,37 @@ elif task == "Lemmatization":
         st.write(' '.join(lemmatized_sentence))
 
 # 4. N-Grams
-# elif task == "N-Grams":
-#     st.subheader("N-Gram Extraction")
-#     n_value = st.sidebar.slider("Select N for N-Grams", 1, 5, 2)
-#     if text_input:
-#         vectorizer = CountVectorizer(ngram_range=(n_value, n_value))
-#         ngrams = vectorizer.fit_transform([text_input])
-#         st.write(vectorizer.get_feature_names_out())
-
 elif task == "N-Grams":
     st.subheader("N-Gram Extraction")
     n_value = st.sidebar.slider("Select N for N-Grams", 1, 5, 2)
     if text_input:
-        # Use CountVectorizer to generate N-grams
         vectorizer = CountVectorizer(ngram_range=(n_value, n_value))
         ngrams_matrix = vectorizer.fit_transform([text_input])
-        
-        # Get N-grams and their frequencies
         ngrams = vectorizer.get_feature_names_out()
-        ngrams_counts = ngrams_matrix.toarray().flatten()  # Flattening to get frequencies
-        
-        # Create a pandas DataFrame for better structure
+        ngrams_counts = ngrams_matrix.toarray().flatten()
         df = pd.DataFrame({
             'N-Gram': ngrams,
             'Frequency': ngrams_counts
         })
-        
-        # Display the DataFrame using Streamlit's st.dataframe (for better table handling)
         st.dataframe(df)
 
 # 5. POS Tagging
-# elif task == "POS Tagging":
-#     st.subheader("Part-of-Speech Tagging")
-#     if text_input:
-#         doc = nlp(text_input)
-#         pos_tags = [(token.text, token.pos_) for token in doc]
-#         st.write(pos_tags)
-
 elif task == "POS Tagging":
     st.subheader("Part-of-Speech Tagging")
     if text_input:
         doc = nlp(text_input)
         pos_tags = [(token.text, token.pos_) for token in doc]
-        
-        # Create a DataFrame for better visualization
         pos_df = pd.DataFrame(pos_tags, columns=["Word", "POS Tag"])
         st.dataframe(pos_df)
 
 # 6. Named Entity Recognition (NER)
-# elif task == "NER":
-#     st.subheader("Named Entity Recognition")
-#     if text_input:
-#         doc = nlp(text_input)
-#         entities = [(entity.text, entity.label_) for entity in doc.ents]
-#         st.write(entities)
-
 elif task == "NER":
     st.subheader("Named Entity Recognition")
     if text_input:
         doc = nlp(text_input)
         entities = [(entity.text, entity.label_) for entity in doc.ents]
-
-        # Create a DataFrame for better presentation
-        # import pandas as pd
-
-        # Create a DataFrame from the entities
         df_entities = pd.DataFrame(entities, columns=["Entity", "Label"])
-
-        # Display the DataFrame as a table
-        st.write("### Extracted Named Entities")
         st.dataframe(df_entities, use_container_width=True)
-
 
 # 7. Text Similarity Recognizer (TSR)
 elif task == "Text Similarity":
