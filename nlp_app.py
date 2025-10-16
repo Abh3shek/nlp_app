@@ -13,6 +13,11 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 tf.compat.v1.reset_default_graph()
 
+nltk_data_path = './nltk_data'
+if not os.path.exists(nltk_data_path):
+    os.makedirs(nltk_data_path)
+nltk.data.path.append(nltk_data_path)
+
 # Load NLP models
 # nlp = spacy.load("en_core_web_sm")
 try:
@@ -24,9 +29,9 @@ except:
     nlp = spacy.load("en_core_web_sm")
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('stopwords')
+nltk.download('punkt', download_dir=nltk_data_path)
+nltk.download('punkt_tab', download_dir=nltk_data_path)
+nltk.download('stopwords', download_dir=nltk_data_path)
 
 # Streamlit UI Setup
 st.title("NLP Pipeline with Streamlit")
